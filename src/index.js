@@ -52,6 +52,10 @@ class Game extends React.Component {
         this.state = {
             history: [{
                 squares: Array(9).fill(null),
+                position: {
+                    row: 0,      // 行
+                    col: 0       // 列   
+                }
             }],
             stepNumber: 0,
             xIsNext: true,
@@ -66,9 +70,17 @@ class Game extends React.Component {
             return;
         }
         squares[i] = this.state.xIsNext ? 'X' : 'O';
+        // 计算坐标
+        const row_position = Math.floor(i / 3) + 1;
+        const col_position = (i % 3) + 1;
+
         this.setState({
             history: history.concat([{
                 squares: squares,
+                position: {
+                    row: row_position,
+                    col: col_position
+                }
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -89,11 +101,14 @@ class Game extends React.Component {
 
         const moves = history.map((step, move) => {
             const desc = move ?
-                'Go to move #' + move :
+                'Go to move # ' + move + ' , Position is ' + Object.values(step.position) :
                 'Go to game start';
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button
+                        onClick={() => this.jumpTo(move)}>
+                        {desc}
+                    </button>
                 </li>
             )
         })
