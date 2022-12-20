@@ -1,63 +1,41 @@
 import React from "react";
 import ReactDOM from 'react-dom/client';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+function WarningBanner(props) {
+    if (!props.warn) {
+        return null;
+    }
 
-/* function Clock(props) {
     return (
-        <div>
-            <h1>It is {props.date.toLocaleTimeString()}.</h1>
+        <div className="warning">
+            Warning!
         </div>
     );
 }
 
-function tick() {
-    root.render(<Clock date={new Date()} />);
-}
-
-setInterval(tick, 1000); */
-
-class Clock extends React.Component {
+class Page extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            date: new Date()
-        };
+        this.state = { showWarning: true };
     }
 
-    componentDidMount() {
-        this.timerID = setInterval(() => {
-            return this.tick();
-        }, 1000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timerID);
-    }
-
-    tick() {
-        this.setState({
-            date: new Date()
-        });
+    handleToggleClick = () => {
+        this.setState(state => ({
+            showWarning: !state.showWarning
+        }));
     }
 
     render() {
         return (
             <div>
-                <h1>It is {this.state.date.toLocaleTimeString()}.</h1>
+                <WarningBanner warn={this.state.showWarning} />
+                <button onClick={this.handleToggleClick}>
+                    {this.state.showWarning ? 'Hide' : 'Show'}
+                </button>
             </div>
-        );
+        )
     }
 }
 
-function App() {
-    return (
-        <div>
-            <Clock />
-            <Clock />
-            <Clock />
-        </div>
-    )
-}
-
-root.render(<App />);
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Page />);
