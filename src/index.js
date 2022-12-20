@@ -1,36 +1,35 @@
 import React from "react";
 import ReactDOM from 'react-dom/client';
 
-function Blog(props) {
-    const sidebar = (
-        <ul>
-            {props.posts.map((post) =>
-                <li key={post.id}>
-                    {post.title}
-                </li>
-            )}
-        </ul>
-    );
+class NameForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { value: '' };
+    }
 
-    const content = props.posts.map((post) =>
-        <div key={post.id}>
-            <h3>{post.title}</h3>
-            <p>{post.content}</p>
-        </div>
-    );
+    handleChange = (e) => {
+        this.setState({ value: e.target.value });
+    }
 
-    return (
-        <div>
-            {sidebar}
-            <hr />
-            {content}
-        </div>
-    );
+    handleSubmit = (e) => {
+        alert('Submit name: ' + this.state.value);
+        e.preventDefault();
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <label>
+                    Name:
+                    <input type="text"
+                        value={this.state.value}
+                        onChange={this.handleChange} />
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
+        )
+    }
 }
-const posts = [
-    { id: 1, title: 'Hello World', content: 'Welcome to learning React!' },
-    { id: 2, title: 'Installation', content: 'You can install React from npm.' }
-];
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Blog posts={posts} />)
+root.render(<NameForm />)
