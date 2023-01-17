@@ -1,35 +1,71 @@
 import React from "react";
 import ReactDOM from 'react-dom/client';
 
-class NameForm extends React.Component {
+function LoginButton(props) {
+    return (
+        <button onClick={props.onClick}>
+            Login
+        </button>
+    );
+}
+
+function LogoutButton(props) {
+    return (
+        <button onClick={props.onClick}>
+            Logout
+        </button>
+    );
+}
+
+function UserGreeting(props) {
+    return <h1>Welcome back!</h1>;
+}
+
+function GuestGreeting(props) {
+    return <h1>Please sign up.</h1>;
+}
+
+function Greeting(props) {
+    const isLoggedIn = props.isLoggedIn;
+    if (isLoggedIn) {
+        return <UserGreeting />;
+    }
+    return <GuestGreeting />;
+}
+
+class LoginControl extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { value: '' };
+        this.state = { isLoggedIn: false };
     }
 
-    handleChange = (e) => {
-        this.setState({ value: e.target.value });
+    handleLoginClick = () => {
+        this.setState({ isLoggedIn: true });
     }
 
-    handleSubmit = (e) => {
-        alert('Submit name: ' + this.state.value);
-        e.preventDefault();
+    handleLogoutClick = () => {
+        this.setState({ isLoggedIn: false });
     }
 
     render() {
+        const isLoggedIn = this.state.isLoggedIn;
+        let button;
+        if (isLoggedIn) {
+            button = <LogoutButton onClick={this.handleLogoutClick} />;
+        } else {
+            button = <LoginButton onClick={this.handleLoginClick} />;
+        }
+
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Name:
-                    <input type="text"
-                        value={this.state.value}
-                        onChange={this.handleChange} />
-                </label>
-                <input type="submit" value="Submit" />
-            </form>
+            <div>
+                <Greeting isLoggedIn={isLoggedIn} />
+                {button}
+            </div>
         )
     }
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<NameForm />)
+root.render(<LoginControl />)
+
+
