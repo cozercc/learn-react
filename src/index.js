@@ -1,42 +1,35 @@
 import React from "react";
 import ReactDOM from 'react-dom/client';
 
-function WarningBanner(props) {
-    if (!props.warn) {
-        return null;
-    }
-
-    return (
-        <div className="warning">
-            Warning!
-        </div>
-    );
-}
-
-class Page extends React.Component {
+class NameForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { showWarning: true };
+        this.state = { value: '' };
     }
 
-    handleToggleClick = () => {
-        this.setState(state => ({
-            showWarning: !state.showWarning
-        }));
+    handleChange = (e) => {
+        this.setState({ value: e.target.value });
+    }
+
+    handleSubmit = (e) => {
+        alert('Name:' + this.state.value);
+        e.preventDefault();
     }
 
     render() {
         return (
-            <div>
-                <WarningBanner warn={this.state.showWarning} />
-                <button onClick={this.handleToggleClick}>
-                    {this.state.showWarning ? 'Hide' : 'Show'}
-                </button>
-            </div>
-        );
+            <form onSubmit={this.handleSubmit}>
+                <label>
+                    Name:
+                    <input type="text" value={this.state.value} onChange={this.handleChange} />
+                </label>
+
+                <input type="submit" value="submit" />
+            </form>
+        )
     }
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Page />)
+root.render(<NameForm />)
 
