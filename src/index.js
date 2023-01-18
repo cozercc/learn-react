@@ -1,71 +1,42 @@
 import React from "react";
 import ReactDOM from 'react-dom/client';
 
-function LoginButton(props) {
-    return (
-        <button onClick={props.onClick}>
-            Login
-        </button>
-    );
-}
-
-function LogoutButton(props) {
-    return (
-        <button onClick={props.onClick}>
-            Logout
-        </button>
-    );
-}
-
-function UserGreeting(props) {
-    return <h1>Welcome back!</h1>;
-}
-
-function GuestGreeting(props) {
-    return <h1>Please sign up.</h1>;
-}
-
-function Greeting(props) {
-    const isLoggedIn = props.isLoggedIn;
-    if (isLoggedIn) {
-        return <UserGreeting />;
+function WarningBanner(props) {
+    if (!props.warn) {
+        return null;
     }
-    return <GuestGreeting />;
+
+    return (
+        <div className="warning">
+            Warning!
+        </div>
+    );
 }
 
-class LoginControl extends React.Component {
+class Page extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { isLoggedIn: false };
+        this.state = { showWarning: true };
     }
 
-    handleLoginClick = () => {
-        this.setState({ isLoggedIn: true });
-    }
-
-    handleLogoutClick = () => {
-        this.setState({ isLoggedIn: false });
+    handleToggleClick = () => {
+        this.setState(state => ({
+            showWarning: !state.showWarning
+        }));
     }
 
     render() {
-        const isLoggedIn = this.state.isLoggedIn;
-        let button;
-        if (isLoggedIn) {
-            button = <LogoutButton onClick={this.handleLogoutClick} />;
-        } else {
-            button = <LoginButton onClick={this.handleLoginClick} />;
-        }
-
         return (
             <div>
-                <Greeting isLoggedIn={isLoggedIn} />
-                {button}
+                <WarningBanner warn={this.state.showWarning} />
+                <button onClick={this.handleToggleClick}>
+                    {this.state.showWarning ? 'Hide' : 'Show'}
+                </button>
             </div>
-        )
+        );
     }
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<LoginControl />)
-
+root.render(<Page />)
 
