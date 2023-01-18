@@ -1,35 +1,51 @@
 import React from "react";
 import ReactDOM from 'react-dom/client';
 
-class NameForm extends React.Component {
+class Reservation extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { value: '' };
+        this.state = {
+            isGoing: false,
+            numberOfGuests: 2
+        };
     }
 
-    handleChange = (e) => {
-        this.setState({ value: e.target.value });
-    }
+    handleInputChange = (e) => {
+        const target = e.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
 
-    handleSubmit = (e) => {
-        alert('Name:' + this.state.value);
-        e.preventDefault();
+        this.setState({
+            [name]: value
+        });
     }
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form>
                 <label>
-                    Name:
-                    <input type="text" value={this.state.value} onChange={this.handleChange} />
+                    参与:
+                    <input
+                        name="isGoing"
+                        type="checkbox"
+                        checked={this.state.isGoing}
+                        onChange={this.handleInputChange}
+                    />
                 </label>
-
-                <input type="submit" value="submit" />
+                <br />
+                <label>
+                    人数:
+                    <input
+                        name="numberOfGuests"
+                        type="number"
+                        value={this.state.numberOfGuests}
+                        onChange={this.handleInputChange}
+                    />
+                </label>
             </form>
-        )
+        );
     }
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<NameForm />)
-
+root.render(<Reservation />)
