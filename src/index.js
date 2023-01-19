@@ -1,173 +1,66 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
-class ProductCategoryRow extends React.Component {
+class Square extends React.Component {
     render() {
-        const category = this.props.category;
         return (
-            <tr>
-                <th colSpan="2">
-                    {category}
-                </th>
-            </tr>
+            <button className="square">
+                {/* TODO */}
+            </button>
         );
     }
 }
 
-class ProductRow extends React.Component {
-    render() {
-        const product = this.props.product;
-        const name = product.stocked ?
-            product.name :
-            <span style={{ color: 'red' }}>
-                {product.name}
-            </span>;
-
-        return (
-            <tr>
-                <td>{name}</td>
-                <td>{product.price}</td>
-            </tr>
-        );
-    }
-}
-
-class ProductTable extends React.Component {
-    render() {
-        const filterText = this.props.filterText;
-        const inStockOnly = this.props.inStockOnly;
-
-        const rows = [];
-        let lastCategory = null;
-
-        this.props.products.forEach((product) => {
-            if (product.name.indexOf(filterText) === -1) {
-                return;
-            }
-            if (inStockOnly && !product.stocked) {
-                return;
-            }
-            if (product.category !== lastCategory) {
-                rows.push(
-                    <ProductCategoryRow
-                        category={product.category}
-                        key={product.category} />
-                );
-            }
-            rows.push(
-                <ProductRow
-                    product={product}
-                    key={product.name}
-                />
-            );
-            lastCategory = product.category;
-        });
-
-        return (
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-            </table>
-        );
-    }
-}
-
-class SearchBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
-        this.handleInStockChange = this.handleInStockChange.bind(this);
-    }
-
-    handleFilterTextChange(e) {
-        this.props.onFilterTextChange(e.target.value);
-    }
-
-    handleInStockChange(e) {
-        this.props.onInStockChange(e.target.checked);
+class Board extends React.Component {
+    renderSquare(i) {
+        return <Square />;
     }
 
     render() {
-        return (
-            <form>
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    value={this.props.filterText}
-                    onChange={this.handleFilterTextChange}
-                />
-                <p>
-                    <input
-                        type="checkbox"
-                        checked={this.props.inStockOnly}
-                        onChange={this.handleInStockChange}
-                    />
-                    {' '}
-                    Only show products in stock
-                </p>
-            </form>
-        );
-    }
-}
+        const status = 'Next player: X';
 
-class FilterableProductTable extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filterText: '',
-            inStockOnly: false
-        };
-
-        this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
-        this.handleInStockChange = this.handleInStockChange.bind(this);
-    }
-
-    handleFilterTextChange(filterText) {
-        this.setState({
-            filterText: filterText
-        });
-    }
-
-    handleInStockChange(inStockOnly) {
-        this.setState({
-            inStockOnly: inStockOnly
-        })
-    }
-
-    render() {
         return (
             <div>
-                <SearchBar
-                    filterText={this.state.filterText}
-                    inStockOnly={this.state.inStockOnly}
-                    onFilterTextChange={this.handleFilterTextChange}
-                    onInStockChange={this.handleInStockChange}
-                />
-                <ProductTable
-                    products={this.props.products}
-                    filterText={this.state.filterText}
-                    inStockOnly={this.state.inStockOnly}
-                />
+                <div className="status">{status}</div>
+                <div className="board-row">
+                    {this.renderSquare(0)}
+                    {this.renderSquare(1)}
+                    {this.renderSquare(2)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(3)}
+                    {this.renderSquare(4)}
+                    {this.renderSquare(5)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(6)}
+                    {this.renderSquare(7)}
+                    {this.renderSquare(8)}
+                </div>
             </div>
         );
     }
 }
 
+class Game extends React.Component {
+    render() {
+        return (
+            <div className="game">
+                <div className="game-board">
+                    <Board />
+                </div>
+                <div className="game-info">
+                    <div>{/* status */}</div>
+                    <ol>{/* TODO */}</ol>
+                </div>
+            </div>
+        );
+    }
+}
 
-const PRODUCTS = [
-    { category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football' },
-    { category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball' },
-    { category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball' },
-    { category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch' },
-    { category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5' },
-    { category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7' }
-];
+// ========================================
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<FilterableProductTable products={PRODUCTS} />);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Game />);
+
