@@ -1,19 +1,8 @@
-export function Profile() {
+export function getImageUrl(imageId, size = 's') {
     return (
-        <img
-            src="https://i.imgur.com/MK3eW3As.jpg"
-            alt="Katherine Johnson"
-        />
+        'https://i.imgur.com/' +
+        imageId +
+        size +
+        '.jpg'
     );
-}
-
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Yep</h1>
-            <Profile />
-            <Profile />
-            <Profile />
-        </section>
-    )
 }
